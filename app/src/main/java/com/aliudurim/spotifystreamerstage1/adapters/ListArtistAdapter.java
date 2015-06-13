@@ -17,6 +17,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import kaaes.spotify.webapi.android.models.Artist;
 
 /**
@@ -34,18 +36,18 @@ public class ListArtistAdapter extends RecyclerView.Adapter<ListArtistAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private LinearLayout llCellForArtist;
-        private TextView txtNameArtist;
-        private ImageView ivForArtist;
 
+        @InjectView(R.id.llCellForArtist)
+        LinearLayout llCellForArtist;
+        @InjectView(R.id.txtNameArtist)
+        TextView txtNameArtist;
+        @InjectView(R.id.ivForArtist)
+        ImageView ivForArtist;
 
         public ViewHolder(View v) {
 
             super(v);
-
-            llCellForArtist = (LinearLayout) v.findViewById(R.id.llCellForArtist);
-            txtNameArtist = (TextView) v.findViewById(R.id.txtNameArtist);
-            ivForArtist = (ImageView) v.findViewById(R.id.ivForArtist);
+            ButterKnife.inject(this, v);
         }
 
     }
@@ -55,7 +57,7 @@ public class ListArtistAdapter extends RecyclerView.Adapter<ListArtistAdapter.Vi
     }
 
     @Override
-    public ListArtistAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_artist_adapter, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;

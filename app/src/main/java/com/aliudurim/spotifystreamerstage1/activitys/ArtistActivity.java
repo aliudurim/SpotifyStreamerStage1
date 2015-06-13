@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -18,16 +19,23 @@ import com.aliudurim.spotifystreamerstage1.tasks.SearchArtistTask;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import kaaes.spotify.webapi.android.models.Artist;
 
 
 public class ArtistActivity extends ActionBarActivity implements SearchCallBack {
 
 
-    private RecyclerView rvListArtist;
+    @InjectView(R.id.rvListArtist)
+    RecyclerView rvListArtist;
+    @InjectView(R.id.svArtist)
+    SearchView svArtist;
+    @InjectView(R.id.progressBar)
+    ProgressBar progressBar;
+
     private ListArtistAdapter listArtistAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private SearchView svArtist;
 
     private ArrayList<Artist> artistArrayList = new ArrayList<>();
     private Toast toast;
@@ -36,10 +44,8 @@ public class ArtistActivity extends ActionBarActivity implements SearchCallBack 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_screen);
+        ButterKnife.inject(this);
 
-
-        rvListArtist = (RecyclerView) findViewById(R.id.rvListArtist);
-        svArtist = (SearchView) findViewById(R.id.svArtist);
         svArtist.setIconified(false);
 
         rvListArtist.setHasFixedSize(true);
@@ -58,7 +64,7 @@ public class ArtistActivity extends ActionBarActivity implements SearchCallBack 
 
                 if (query.length() > 0) {
                     if (isNetworkAvailable(getApplicationContext())) {
-                        new SearchArtistTask(ArtistActivity.this, true).execute(query);
+                        new SearchArtistTask(ArtistActivity.this, true, progressBar).execute(query);
                     } else {
                         showToast("No Internet Connection");
                     }
@@ -71,7 +77,7 @@ public class ArtistActivity extends ActionBarActivity implements SearchCallBack 
             public boolean onQueryTextChange(String newText) {
                 if (newText.length() > 0) {
                     if (isNetworkAvailable(getApplicationContext())) {
-                        new SearchArtistTask(ArtistActivity.this, false).execute(newText);
+                        new SearchArtistTask(ArtistActivity.this, false, progressBar).execute(newText);
                     } else {
                         showToast("No Internet Connection");
                     }

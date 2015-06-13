@@ -1,6 +1,8 @@
 package com.aliudurim.spotifystreamerstage1.tasks;
 
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.aliudurim.spotifystreamerstage1.callbacks.SearchCallBack;
 
@@ -15,10 +17,18 @@ public class SearchArtistTask extends AsyncTask<String, Void, ArtistsPager> {
 
     private SearchCallBack searchCallBack;
     private boolean isArtistExist = false;
+    private ProgressBar progressBar;
 
-    public SearchArtistTask(SearchCallBack searchCallBack, boolean isArtistExist) {
+    public SearchArtistTask(SearchCallBack searchCallBack, boolean isArtistExist, ProgressBar progressBar) {
         this.searchCallBack = searchCallBack;
         this.isArtistExist = isArtistExist;
+        this.progressBar = progressBar;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        this.progressBar.setVisibility(View.VISIBLE);
+        super.onPreExecute();
     }
 
     @Override
@@ -35,7 +45,7 @@ public class SearchArtistTask extends AsyncTask<String, Void, ArtistsPager> {
 
     @Override
     protected void onPostExecute(ArtistsPager artistsPager) {
-
+        this.progressBar.setVisibility(View.GONE);
         if (artistsPager != null)
             searchCallBack.onSearchCallBack(artistsPager.artists.items, isArtistExist);
     }

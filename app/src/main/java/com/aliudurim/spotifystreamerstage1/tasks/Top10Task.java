@@ -1,6 +1,8 @@
 package com.aliudurim.spotifystreamerstage1.tasks;
 
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.aliudurim.spotifystreamerstage1.callbacks.Top10CallBack;
 
@@ -14,9 +16,17 @@ import kaaes.spotify.webapi.android.models.Tracks;
 public class Top10Task extends AsyncTask<String, Void, Tracks> {
 
     private Top10CallBack top10CallBack;
+    private ProgressBar progressBar;
 
-    public Top10Task(Top10CallBack top10CallBack) {
+    public Top10Task(Top10CallBack top10CallBack, ProgressBar progressBar) {
         this.top10CallBack = top10CallBack;
+        this.progressBar = progressBar;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        this.progressBar.setVisibility(View.VISIBLE);
+        super.onPreExecute();
     }
 
     @Override
@@ -34,6 +44,8 @@ public class Top10Task extends AsyncTask<String, Void, Tracks> {
 
     @Override
     protected void onPostExecute(Tracks tracks) {
+
+        this.progressBar.setVisibility(View.GONE);
 
         if (tracks != null)
             top10CallBack.onTop10CallBack(tracks.tracks);
